@@ -18,19 +18,20 @@
 #endif
 
 // MAXRESERVED representa a quantidade de palavras reservadas
-// Para a linguagem Tiny esse valor eh 8
-#define MAXRESERVED 8
+// Para a linguagem Cmenos esse valor eh 6
+#define MAXRESERVED 6
 
 
 typedef enum
     //tokens de controle
     {ENDFILE,ERROR,
     //palavras reservadas
-    IF,THEN,ELSE,END,REPEAT,UNTIL,READ,WRITE,
+    ELSE,IF,INT,RETURN,VOID,WHILE,
     //token multicaracteres
     ID,NUM,
     //simbolos especiais
-    ASSIGN,EQ,LT,PLUS,MINUS,TIMES,OVER,LPAREN,RPAREN,SEMI
+    PLUS,MINUS,TIMES,OVER,LT,LTE,GT,GTE,EQ,DIFF,ASSIGN,SEMI,COMMA,
+    LPAREN,RPAREN,LBRACKET,RBRACKET,LCURLY,RCURLY
     }TokenType;
 
 //arquivo de texto do codigo fonte

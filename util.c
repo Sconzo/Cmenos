@@ -7,25 +7,35 @@ void printToken(TokenType token ,const char* tokenString)
     switch (token)
     {
         case IF:
-        case THEN:
         case ELSE:
-        case END:
-        case REPEAT:
-        case UNTIL:
-        case READ:
-        case WRITE:
+        case INT:
+        case RETURN:
+        case VOID:
+        case WHILE:
             fprintf(listing, "reserved word: %s\n",tokenString);
             break;
-        case ASSIGN: fprintf(listing,":=\n");break;
-        case LT: fprintf(listing,"<\n");break;
-        case EQ: fprintf(listing,"=\n");break;
-        case LPAREN: fprintf(listing,"(\n");break;
-        case RPAREN: fprintf(listing,")\n");break;
-        case SEMI: fprintf(listing,";\n");break;
+
+
         case PLUS: fprintf(listing,"+\n");break;
         case MINUS: fprintf(listing,"-\n");break;
         case TIMES: fprintf(listing,"*\n");break;
         case OVER: fprintf(listing,"/\n");break;
+        case LT: fprintf(listing,"<\n");break;
+        case LTE: fprintf(listing,"<=\n");break;
+        case GT: fprintf(listing,">\n");break;
+        case GTE: fprintf(listing,">=\n");break;
+        case EQ: fprintf(listing,"==\n");break;
+        case DIFF: fprintf(listing,"!=\n");break;
+        case ASSIGN: fprintf(listing,"=\n");break;
+        case SEMI: fprintf(listing,";\n");break;
+        case COMMA: fprintf(listing,",\n");break;
+        case LPAREN: fprintf(listing,"(\n");break;
+        case RPAREN: fprintf(listing,")\n");break;
+        case LBRACKET: fprintf(listing,"[\n");break;
+        case RBRACKET: fprintf(listing,"]\n");break;
+        case LCURLY: fprintf(listing,"{\n");break;
+        case RCURLY: fprintf(listing,"}\n");break;
+
         case ENDFILE: fprintf(listing,"EOF\n");break;
         case NUM:
             fprintf(listing,"NUM, val= %s\n",tokenString);

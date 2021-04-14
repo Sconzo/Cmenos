@@ -3,7 +3,7 @@
 #include "globals.h"
 #include "scan.c"
 #include "util.c"
-#include "parse.c"
+//#include "parse.c"
 // Para fazzer apenas o scan, seta TRUE
 #define NO_PARSE TRUE
 
@@ -52,7 +52,7 @@ int main (int argc, char * argv[])
         exit(1);
     }
     strcpy(pgm,argv[1]);
-    if (strchr(pgm,'.') == NULL) strcat(pgm,".tny");
+    if (strchr(pgm,'.') == NULL) strcat(pgm,".mns");
 
     source = fopen(pgm,"r");
 
@@ -64,7 +64,7 @@ int main (int argc, char * argv[])
 
     listing = stdout; //envia a lista para a tela
 
-    fprintf(listing,"\n TINY COMPILATION: %s\n",pgm);
+    fprintf(listing,"\n C Menos COMPILATION: %s\n",pgm);
 
     #if NO_PARSE
         while (getToken() != ENDFILE);

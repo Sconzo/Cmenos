@@ -6,8 +6,9 @@
 typedef enum
 {
     START,
-    INASSIGN,
-    INCOMMENT,
+    INDIFF,
+    COMMENT,
+    COMPARETORS,
     INNUM,
     INID,
     DONE
@@ -62,8 +63,8 @@ static struct
     char* str;
     TokenType tok;
 } reservedWords[MAXRESERVED] =
-            {{"if", IF}, {"then", THEN}, {"else", ELSE}, {"end", END},
-            {"repeat", REPEAT}, {"until", UNTIL}, {"read", READ}, {"write", WRITE}};
+            {{"if", IF},  {"else", ELSE}, {"int", INT},
+            {"return", RETURN}, {"void", VOID}, {"while", WHILE}};
 
 
 
@@ -98,13 +99,27 @@ TokenType getToken(void)
         char c = getNextChar();
         save = TRUE;
         switch (state)
-        {
+        { 
         case START:
             if (isdigit(c)) state = INNUM;
             else if (isalpha(c)) state = INID;
-            else if (c == ':') state = INASSIGN;
+            else if (c == '!') state = INDIFF;
             else if ((c==' ') || (c=='\t') || (c=='\n')) save = FALSE;
-            else if (c=='{') {save = FALSE;state = INCOMMENT;}
+            else if (c=='/') 
+            {
+                if (getNextChar() == '*')
+                {
+                    state = COMMENT;
+                    save  = FALSE;
+                }
+                else
+                {
+                    ungetNextChar();
+                    currentToken = OVER;
+                    save = TRUE;
+                    state = DONE;
+                }
+            }
             else
             {
                 state = DONE;
@@ -115,10 +130,19 @@ TokenType getToken(void)
                     currentToken = ENDFILE;
                     break;
                 case '=':
-                    currentToken = EQ;
+                    if(getNextChar() == '=')
+                        currentToken = EQ;
+                    else{currentToken = ASSIGN;ungetNextChar();}
                     break;
                 case '<':
-                    currentToken = LT;
+                    if(getNextChar() == '=')
+                        currentToken = LTE;
+                    else{currentToken = LT;ungetNextChar();}
+                    break;
+                case '>':
+                    if(getNextChar() == '=')
+                        currentToken = GTE;
+                    else{currentToken = GTE;ungetNextChar();}
                     break;
                 case '+':
                     currentToken = PLUS;
@@ -129,8 +153,11 @@ TokenType getToken(void)
                 case '*':
                     currentToken = TIMES;
                     break;
-                case '/':
-                    currentToken = OVER;
+                case ';':
+                    currentToken = SEMI;
+                    break;
+                case ',':
+                    currentToken = COMMA;
                     break;
                 case '(':
                     currentToken = LPAREN;
@@ -138,22 +165,38 @@ TokenType getToken(void)
                 case ')':
                     currentToken = RPAREN;
                     break;
-                case ';':
-                    currentToken = SEMI;
+                case '[':
+                    currentToken = LBRACKET;
                     break;
+                case ']':
+                    currentToken = RBRACKET;
+                    break;
+                case '{':
+                    currentToken = LCURLY;
+                    break;
+                case '}':
+                    currentToken = RCURLY;
+                    break;
+
                 default:
                     currentToken = ERROR;
                     break;
                 }
             }
             break;
-        case INCOMMENT:
+        case COMMENT:
             save = FALSE;
-            if (c=='}') state = START;
+            if (c=='*')
+            {
+                if (getNextChar() == '/')
+                {
+                    state = START;
+                }
+            } 
             break;
-        case INASSIGN:
+        case INDIFF:
             state = DONE;
-            if(c=='=') currentToken = ASSIGN;
+            if(c=='=') currentToken = DIFF;
             else //ocorreu um erro e volta para a entrada
             {
                 ungetNextChar();
@@ -188,6 +231,7 @@ TokenType getToken(void)
         }
         if ((save) && (tokenStringIndex <= MAXTOKENLEN)) 
             tokenString[tokenStringIndex++] = c;
+        
         if (state == DONE)
         {
             tokenString[tokenStringIndex] = '\0';
